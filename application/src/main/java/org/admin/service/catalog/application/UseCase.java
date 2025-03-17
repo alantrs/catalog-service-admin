@@ -1,6 +1,6 @@
 package org.admin.service.catalog.application;
 
-import org.admin.service.catalog.domain.Category;
+import org.admin.service.catalog.domain.category.Category;
 
 public class UseCase {
 
