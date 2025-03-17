@@ -1,7 +1,6 @@
 package org.admin.service.catalog.domain;
 
 import org.admin.service.catalog.domain.category.Category;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,7 +14,7 @@ public class CategoryTest {
         final Boolean expectedActive = true;
 
         final var actualCategory =
-                Category.newCtegory(expectedName, expectedDescription, expectedActive);
+                Category.newCategory(expectedName, expectedDescription, expectedActive);
 
         assertNotNull(actualCategory);
         assertNotNull(actualCategory.getId());
