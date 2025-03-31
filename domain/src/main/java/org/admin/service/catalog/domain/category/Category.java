@@ -1,9 +1,9 @@
 package org.admin.service.catalog.domain.category;
 
 import org.admin.service.catalog.domain.AggregateRoot;
+import org.admin.service.catalog.domain.validation.ValidationHandler;
 
 import java.time.Instant;
-import java.util.UUID;
 
 public class Category extends AggregateRoot<CategoryID> {
 
@@ -37,7 +37,44 @@ public class Category extends AggregateRoot<CategoryID> {
                                        final Boolean isActive) {
         final var id = CategoryID.unique();
         final var now = Instant.now();
-        return new Category(id, aName, aDescription, isActive, now, now, null);
+        final var deletedAt = isActive ? null : now;
+        return new Category(id, aName, aDescription, isActive, now, now, deletedAt);
+    }
+
+    public Category deactivate(){
+        final var now = Instant.now();
+        if(this.getDeletedAt() == null){
+            this.deletedAt = now;
+        }
+        this.isActive = false;
+        this.updatedAt = now;
+
+        return this;
+    }
+
+    public Category activate(){
+        final var now = Instant.now();
+        this.deletedAt = null;
+        this.isActive = true;
+        this.updatedAt = now;
+
+        return this;
+    }
+
+    public Category update(final String aName, final String aDescription, final boolean isActive){
+        if (isActive){
+            this.activate();
+        }else{
+            this.deactivate();
+        }
+        this.name = aName;
+        this.description =aDescription;
+        this.updatedAt = Instant.now();
+        return this;
+    }
+    @Override
+    public void validate(ValidationHandler handler) {
+        new CategoryValidator(this, handler).validate();
     }
 
     public CategoryID getId() {
@@ -52,7 +89,7 @@ public class Category extends AggregateRoot<CategoryID> {
         return description;
     }
 
-    public Boolean getActive() {
+    public Boolean isActive() {
         return isActive;
     }
 
